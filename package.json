@@ -1,0 +1,50 @@
+{
+  "name": "@lchemy/api",
+  "version": "0.0.1",
+  "description": "",
+  "author": "Jesse Zhang (http://jessezhang.me/)",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lchemy/api.git"
+  },
+  "engines": {
+    "node": ">=6"
+  },
+  "scripts": {
+    "build": "tsc -p ./tsconfig.build.json",
+    "clean": "del-cli ./.nyc_output ./coverage ./dist ./test-tmp",
+    "coverage": "nyc --reporter lcov --reporter text --reporter text-summary --exclude \"**/test/**\" --report-dir ./coverage npm run test",
+    "coveralls": "cat ./coverage/lcov.info | coveralls",
+    "lint": "tslint -c tslint.json --project tsconfig.json -t stylish",
+    "postbuild": "node ./scripts/copy-package && node ./scripts/copy-dist-files",
+    "postinstall": "typings install",
+    "posttest": "del-cli ./test-tmp",
+    "prebuild": "del-cli ./dist && npm run test && npm run lint",
+    "precoverage": "del-cli ./coverage",
+    "pretest": "del-cli ./test-tmp && tsc -p ./tsconfig.test.json",
+    "test": "mocha --ui bdd --require ./test-tmp/test/bootstrap \"./test-tmp/test/**/*.spec.js\""
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@lchemy/api-filter-parser": "^0.0.1",
+    "@lchemy/orm": "^0.1.1",
+    "boom": "^4.2.0",
+    "hapi": "^16.0.1"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "chai-as-promised": "^6.0.0",
+    "coveralls": "^2.11.15",
+    "del-cli": "^0.2.0",
+    "knex": "^0.12.6",
+    "mocha": "^3.2.0",
+    "mock-knex": "^0.3.7",
+    "nyc": "^10.0.0",
+    "sinon": "^1.17.6",
+    "sinon-chai": "^2.8.0",
+    "sqlite3": "^3.1.8",
+    "tslint": "^4.0.2",
+    "typescript": "^2.1.1",
+    "typings": "^2.0.0"
+  }
+}
