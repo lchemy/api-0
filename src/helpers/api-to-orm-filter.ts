@@ -26,7 +26,7 @@ function apiExpressionToOrmFilter(orm: Orm, filter: FilterExpression): Promise<F
 				}
 			});
 		}
-		return Promise.reject(Boom.badRequest(`Invalid filter expression.`));
+		return Promise.reject(Boom.badRequest(`Invalid filter expression`));
 	}
 
 	return getFilterableOrmField(orm, filter.field).then((field) => {
@@ -142,7 +142,7 @@ function apiExpressionToOrmFilter(orm: Orm, filter: FilterExpression): Promise<F
 			default:
 				break;
 		}
-		return Promise.reject<Filter>(Boom.badRequest(`Invalid filter expression.`));
+		return Promise.reject<Filter>(Boom.badRequest(`Invalid filter expression`));
 	});
 }
 
@@ -150,7 +150,7 @@ type FilterableOrmField = Field<Orm, any> | JoinManyField<Orm, Orm>;
 function getFilterableOrmField(orm: Orm, fieldStr: string): Promise<FilterableOrmField> {
 	return getOrmField(orm, fieldStr).then((field) => {
 		if (!(field instanceof Field || field instanceof JoinManyField)) {
-			return Promise.reject(Boom.badRequest(`Invalid filter field: ${ fieldStr }`));
+			return Promise.reject(Boom.badRequest(`Invalid filter field '${ fieldStr }'`));
 		}
 		return field;
 	});

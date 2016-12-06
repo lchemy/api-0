@@ -25,7 +25,7 @@ export function getOrmField(orm: Orm, fieldStr: string): Promise<OrmField> {
 	}, orm);
 
 	if (out == null) {
-		return Promise.reject(Boom.badRequest(`Invalid field: ${ fieldStr }`));
+		return Promise.reject(Boom.badRequest(`Invalid field '${ fieldStr }'`));
 	}
 
 	if (ormCache == null) {

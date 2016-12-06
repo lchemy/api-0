@@ -1,15 +1,18 @@
+import { ValidationResult, Validator } from "@lchemy/model/validation";
 import { FindAllQuery, FindAllWithCountResult, FindOneQuery, Orm, withTransaction } from "@lchemy/orm";
 import { FindQueryField } from "@lchemy/orm/queries/helpers";
 import * as Boom from "boom";
 
 import { ModelDao } from "./dao";
 
+const VALID_RESULT: ValidationResult = new ValidationResult(null, null);
+
 export abstract class Service {
 }
 
-// TODO: add validator
 export abstract class ModelService<O extends Orm, M, J, A> {
 	abstract dao: ModelDao<O, M, J, A>;
+	validator?: Validator<M>;
 
 	get orm(): Promise<O> {
 		return this.dao.orm;
@@ -28,10 +31,14 @@ export abstract class ModelService<O extends Orm, M, J, A> {
 		return this.dao.findById(id, builder, auth);
 	}
 	create(model: M, auth?: A): Promise<M> {
-		return this.dao.insertModelAndFind(model, auth);
+		return this.assertValid(model).then(() => {
+			return this.dao.insertModelAndFind(model, auth);
+		});
 	}
 	update(model: M, auth?: A): Promise<M> {
-		return this.dao.updateModelAndFind(model, auth);
+		return this.assertValid(model).then(() => {
+			return this.dao.updateModelAndFind(model, auth);
+		});
 	}
 	delete(id: number | string, auth?: A): Promise<undefined> {
 		return withTransaction((trx) => {
@@ -41,6 +48,22 @@ export abstract class ModelService<O extends Orm, M, J, A> {
 				}
 				return this.dao.removeModel(model, auth, trx);
 			});
+		});
+	}
+
+	validate(model: M): Promise<ValidationResult> {
+		if (this.validator == null) {
+			return Promise.resolve(VALID_RESULT);
+		}
+		return this.validator.validate(model);
+	}
+	protected assertValid(model: M): Promise<void> {
+		return this.validate(model).then((res) => {
+			if (!res.isValid) {
+				let err: Boom.BoomError = Boom.badRequest();
+				err.output.payload.errors = res.errors;
+				return Promise.reject<void>(err);
+			}
 		});
 	}
 }

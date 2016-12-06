@@ -15,6 +15,6 @@ export function parseFilter(orm: Orm, filterString?: string): Promise<Filter | u
 	try {
 		return apiToOrmFilter(orm, parser.parse(filterString));
 	} catch (e) {
-		return Promise.reject(Boom.badRequest(`Invalid filter expression: ${ filterString }`));
+		return Promise.reject(Boom.badRequest(`Invalid filter expression '${ filterString }'`));
 	}
 }

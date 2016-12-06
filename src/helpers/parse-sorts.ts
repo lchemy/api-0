@@ -15,7 +15,7 @@ export function parseSorts(orm: Orm, sortsStr?: string): Promise<RawFindSortFiel
 			direction: SortDirection = parseDirection(directionStr);
 		return getOrmField(orm, fieldStr).then<RawFindSortField>((field) => {
 			if (!(field instanceof Field)) {
-				return Promise.reject(Boom.badRequest(`Invalid sort field: ${ fieldStr }`));
+				return Promise.reject(Boom.badRequest(`Invalid sort field '${ fieldStr }'`));
 			}
 			return {
 				field,
