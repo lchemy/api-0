@@ -1,6 +1,6 @@
 import { expect } from "chai";
 
-describe("sample unit", () => {
+describe("parse filter helper", () => {
 	it("should pass", () => {
 		expect(true).to.be.true;
 	});

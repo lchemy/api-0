@@ -7,7 +7,7 @@ import { Field, Filter } from "@lchemy/orm/core";
 import { FindQueryField } from "@lchemy/orm/queries/helpers";
 import * as Knex from "knex";
 
-export abstract  class Dao<O extends Orm, M, J, A> {
+export abstract class Dao<O extends Orm, M, J, A> {
 	readonly orm: Promise<O> = this.initOrm();
 
 	protected abstract ref: string | symbol;
@@ -93,9 +93,9 @@ export type ModelDaoFieldsBuilder<O extends Orm> = (orm: O) => Array<Field<O, an
 export type ModelDaoFieldsBuilders<O extends Orm> = {
 	insert: ModelDaoFieldsBuilder<O>,
 	update: ModelDaoFieldsBuilder<O>
-} | ModelDaoFieldsBuilder<O>;
+};
 export abstract class ModelDao<O extends Orm, M, J, A> extends Dao<O, M, J, A> {
-	protected abstract fields: ModelDaoFieldsBuilders<O>;
+	protected abstract fields: ModelDaoFieldsBuilders<O> | ModelDaoFieldsBuilder<O>;
 	private get insertFields(): ModelDaoFieldsBuilder<O> {
 		return typeof this.fields === "object" ? this.fields.insert : this.fields;
 	}
