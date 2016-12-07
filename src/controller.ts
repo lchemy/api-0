@@ -1,3 +1,4 @@
+import { Model } from "@lchemy/model";
 import { Orm } from "@lchemy/orm";
 import * as Boom from "boom";
 import { IDictionary, IReply, IRouteConfiguration, Request } from "hapi";
@@ -17,14 +18,14 @@ export abstract class Controller {
 	}
 }
 
-export interface ModelControllerAuthMap<M, A> {
+export interface ModelControllerAuthMap<M extends Model, A> {
 	get?: ((auth: A | undefined) => boolean) | null;
 	create?: ((auth: A | undefined, model: M) => boolean) | null;
 	update?: ((auth: A | undefined, model: M) => boolean) | null;
 	delete?: ((auth: A | undefined, model: M) => boolean) | null;
 }
 
-export abstract class ModelController<O extends Orm, M, J, A> extends Controller {
+export abstract class ModelController<O extends Orm, M extends Model, J, A> extends Controller {
 	protected abstract auth: ModelControllerAuthMap<M, A>;
 	protected abstract service: ModelService<O, M, J, A>;
 
@@ -128,7 +129,7 @@ export abstract class ModelController<O extends Orm, M, J, A> extends Controller
 	}
 }
 
-export function payloadToModel<M, J>(request: Request, toModel: (json: J) => M): Promise<M> {
+export function payloadToModel<M extends Model, J>(request: Request, toModel: (json: J) => M): Promise<M> {
 	return new Promise((resolve, reject) => {
 		try {
 			resolve(toModel(request.payload as J));
@@ -138,7 +139,7 @@ export function payloadToModel<M, J>(request: Request, toModel: (json: J) => M):
 	});
 }
 
-export function assertCredentials<M, A>(request: Request, checkFn?: ((auth: A | undefined, model?: M) => boolean) | null, model?: M): Promise<void> {
+export function assertCredentials<M extends Model, A>(request: Request, checkFn?: ((auth: A | undefined, model?: M) => boolean) | null, model?: M): Promise<void> {
 	return new Promise<void>((resolve, reject) => {
 		if (checkFn === null) {
 			resolve();
@@ -165,7 +166,7 @@ export function assertCredentials<M, A>(request: Request, checkFn?: ((auth: A | 
 
 export function getRequestId(params: IDictionary<string>, key: string): number | string {
 	let id: number | string = params[key];
-	if (!Number.isNaN(id)) {
+	if (!Number.isNaN(id as any)) {
 		id = Number(id);
 	}
 	return id;

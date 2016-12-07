@@ -1,3 +1,4 @@
+import { Model } from "@lchemy/model";
 import { ValidationResult, Validator } from "@lchemy/model/validation";
 import { FindAllQuery, FindAllWithCountResult, FindOneQuery, Orm, withTransaction } from "@lchemy/orm";
 import { FindQueryField } from "@lchemy/orm/queries/helpers";
@@ -10,7 +11,7 @@ const VALID_RESULT: ValidationResult = new ValidationResult(null, null);
 export abstract class Service {
 }
 
-export abstract class ModelService<O extends Orm, M, J, A> {
+export abstract class ModelService<O extends Orm, M extends Model, J, A> {
 	abstract dao: ModelDao<O, M, J, A>;
 	validator?: Validator<M>;
 

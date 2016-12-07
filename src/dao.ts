@@ -1,3 +1,4 @@
+import { Model } from "@lchemy/model";
 import {
 	FindAllQuery, FindAllWithCountResult, FindOneQuery, Orm, UpdateQuery,
 	findAll, findAllWithCount, findById, findByIds, findCount, findOne, getOrm, insert,
@@ -7,7 +8,7 @@ import { Field, Filter } from "@lchemy/orm/core";
 import { FindQueryField } from "@lchemy/orm/queries/helpers";
 import * as Knex from "knex";
 
-export abstract class Dao<O extends Orm, M, J, A> {
+export abstract class Dao<O extends Orm, M extends Model, J, A> {
 	readonly orm: Promise<O> = this.initOrm();
 
 	protected abstract ref: string | symbol;
