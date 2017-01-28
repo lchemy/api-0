@@ -19,24 +19,24 @@ const methods: string[] = [
 	"updateModels"
 ];
 
-export type OrmMethodStubs = {
-	findAll: SinonStub,
-	findAllWithCount: SinonStub,
-	findById: SinonStub,
-	findByIds: SinonStub,
-	findCount: SinonStub,
-	findOne: SinonStub,
-	getOrm: SinonStub,
-	insert: SinonStub,
-	insertOne: SinonStub,
-	remove: SinonStub,
-	removeModel: SinonStub,
-	removeModels: SinonStub,
-	update: SinonStub,
-	updateModel: SinonStub,
-	updateModels: SinonStub,
-	withTransaction: SinonStub
-};
+export interface OrmMethodStubs {
+	findAll: SinonStub;
+	findAllWithCount: SinonStub;
+	findById: SinonStub;
+	findByIds: SinonStub;
+	findCount: SinonStub;
+	findOne: SinonStub;
+	getOrm: SinonStub;
+	insert: SinonStub;
+	insertOne: SinonStub;
+	remove: SinonStub;
+	removeModel: SinonStub;
+	removeModels: SinonStub;
+	update: SinonStub;
+	updateModel: SinonStub;
+	updateModels: SinonStub;
+	withTransaction: SinonStub;
+}
 
 export function stubOrmMethods(sandbox: SinonSandbox): OrmMethodStubs {
 	let stubs: OrmMethodStubs = methods.reduce((memo, method) => {

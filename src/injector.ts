@@ -5,9 +5,7 @@ export class Injector {
 		this.set(Injector, this);
 	}
 
-	get<T>(ref: new() => T): T;
-	get<T>(ref: string | symbol | Object): T;
-	get<T>(ref: any): T {
+	get<T>(ref: (new() => T) | string | symbol | Object): T {
 		if (this.map.has(ref)) {
 			return this.map.get(ref);
 		}

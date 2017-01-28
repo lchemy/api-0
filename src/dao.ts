@@ -5,7 +5,7 @@ import {
 	insertOne, remove, removeModel, removeModels, update, updateModel, updateModels, withTransaction
 } from "@lchemy/orm";
 import { Field, Filter } from "@lchemy/orm/core";
-import { FindQueryField } from "@lchemy/orm/queries/helpers";
+import { FindQueryField, ModelLike } from "@lchemy/orm/queries/helpers";
 import * as Knex from "knex";
 
 export abstract class Dao<O extends Orm, M extends Model, J, A> {
@@ -46,12 +46,12 @@ export abstract class Dao<O extends Orm, M extends Model, J, A> {
 		});
 	}
 
-	rawInsert(builder: (orm: O) => Array<Field<O, any>>, jsons: J[], trx?: Knex.Transaction): Promise<number[]> {
+	rawInsert(builder: (orm: O) => Array<Field<O, any>>, jsons: Array<ModelLike<J>>, trx?: Knex.Transaction): Promise<number[]> {
 		return this.orm.then((orm) => {
 			return insert<O, J>(orm, builder, jsons, trx);
 		});
 	}
-	rawInsertOne(builder: (orm: O) => Array<Field<O, any>>, json: J, trx?: Knex.Transaction): Promise<number> {
+	rawInsertOne(builder: (orm: O) => Array<Field<O, any>>, json: ModelLike<J>, trx?: Knex.Transaction): Promise<number> {
 		return this.orm.then((orm) => {
 			return insertOne<O, J>(orm, builder, json, trx);
 		});
@@ -71,7 +71,7 @@ export abstract class Dao<O extends Orm, M extends Model, J, A> {
 		});
 	}
 
-	rawUpdate(builder: (orm: O) => UpdateQuery<O>, json: J, auth?: A, trx?: Knex.Transaction): Promise<number> {
+	rawUpdate(builder: (orm: O) => UpdateQuery<O>, json: ModelLike<J>, auth?: A, trx?: Knex.Transaction): Promise<number> {
 		return this.orm.then((orm) => {
 			return update<O, J, A>(orm, builder, json, auth, trx);
 		});
@@ -91,10 +91,11 @@ export abstract class Dao<O extends Orm, M extends Model, J, A> {
 }
 
 export type ModelDaoFieldsBuilder<O extends Orm> = (orm: O) => Array<Field<O, any>>;
-export type ModelDaoFieldsBuilders<O extends Orm> = {
-	insert: ModelDaoFieldsBuilder<O>,
-	update: ModelDaoFieldsBuilder<O>
-};
+export interface ModelDaoFieldsBuilders<O extends Orm> {
+	insert: ModelDaoFieldsBuilder<O>;
+	update: ModelDaoFieldsBuilder<O>;
+}
+
 export abstract class ModelDao<O extends Orm, M, J, A> extends Dao<O, M, J, A> {
 	protected abstract fields: ModelDaoFieldsBuilders<O> | ModelDaoFieldsBuilder<O>;
 	private get insertFields(): ModelDaoFieldsBuilder<O> {
