@@ -1,5 +1,5 @@
 export class Injector {
-	private map: WeakMap<any, any> = new WeakMap<any, any>();
+	private map: Map<any, any> = new Map<any, any>();
 
 	constructor() {
 		this.set(Injector, this);
@@ -28,6 +28,10 @@ export class Injector {
 		}
 
 		this.map.set(ref, value);
+	}
+
+	clear(): void {
+		this.map.clear();
 	}
 }
 

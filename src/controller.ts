@@ -173,5 +173,5 @@ export function getRequestId(params: IDictionary<string>, key: string): number |
 }
 
 export function getCredentials<A>(request: Request): A | undefined {
-	return request.auth.isAuthenticated ? request.auth.credentials : undefined;
+	return request.auth.credentials != null ? request.auth.credentials : undefined;
 }
