@@ -6,7 +6,7 @@
     "boom": "registry:dt/boom#0.0.0+20160724101333",
     "hapi": "registry:dt/hapi#13.0.0+20161019130714",
     "knex": "registry:dt/knex#0.0.0+20161009195237",
-    "node": "registry:env/node#6.0.0+20161105011511"
+    "node": "registry:env/node#6.0.0+20170213133316"
   },
   "devDependencies": {
     "chai": "registry:npm/chai#3.5.0+20160723033700",
