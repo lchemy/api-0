@@ -150,7 +150,7 @@ type FilterableOrmField = Field<Orm, any> | JoinManyField<Orm, Orm>;
 function getFilterableOrmField(orm: Orm, fieldStr: string): Promise<FilterableOrmField> {
 	return getOrmField(orm, fieldStr).then((field) => {
 		if (!(field instanceof Field || field instanceof JoinManyField)) {
-			return Promise.reject(Boom.badRequest(`Invalid filter field '${ fieldStr }'`));
+			return Promise.reject<any>(Boom.badRequest(`Invalid filter field '${ fieldStr }'`));
 		}
 		return field;
 	});
