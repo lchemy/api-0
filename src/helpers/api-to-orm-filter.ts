@@ -88,14 +88,14 @@ function apiExpressionToOrmFilter(orm: Orm, filter: FilterExpression): Promise<F
 					return field.notLike(value);
 				});
 			case "in":
-				if (!(field instanceof RangeField)) {
+				if (!(field instanceof Field)) {
 					break;
 				}
 				return expandFilterValues(orm, filter.value).then((values) => {
 					return field.in(...values);
 				});
 			case "not in":
-				if (!(field instanceof RangeField)) {
+				if (!(field instanceof Field)) {
 					break;
 				}
 				return expandFilterValues(orm, filter.value).then((values) => {
